@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PaiementPage from "./PaiementPage";
 
 const BRAND = {
   name: "GTONTINA",
@@ -182,6 +183,7 @@ export default function App() {
     { key: "rotation", label: "Rotation", icon: "↻" },
     { key: "reunions", label: "Réunions", icon: "◫" },
     { key: "messages", label: "Messages", icon: "◻" },
+    { key: "paiement", label: "Paiement", icon: "💳" },
   ];
 
   const changeTab = (key) => { setTab(key); setMobileMenuOpen(false); };
@@ -246,6 +248,7 @@ export default function App() {
         {/* MAIN CONTENT */}
         <main style={{ flex: 1, padding: isMobile ? "1rem" : "1.5rem", overflowY: "auto", minWidth: 0 }}>
 
+          {tab === "paiement" && <PaiementPage />}
           {/* DASHBOARD */}
           {tab === "dashboard" && (
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
