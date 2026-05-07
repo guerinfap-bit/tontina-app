@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTONTINA — La tontine digitale du Cameroun</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C8940A;
+  --gold-light: #F5E6B0;
+  --gold-dark: #8B6508;
+  --brown: #3D1F00;
+  --brown-light: #7A4010;
+  --cream: #FDF6E3;
+  --green: #1B6B3A;
+  --green-light: #D4EDDA;
+  --white: #FFFFFF;
+  --wa: #25D366;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--brown);
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--brown);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, #7A401040 0%, transparent 70%);
+}
+
+.hero-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--gold) 0, var(--gold) 1px,
+    transparent 0, transparent 50%
+  );
+  background-size: 30px 30px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: var(--gold-dark);
+  color: var(--gold-light);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 20px;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  color: var(--gold);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.hero h1 span {
+  color: var(--white);
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  color: var(--gold-light);
+  opacity: 0.8;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.hero-local {
+  font-size: 13px;
+  color: var(--gold);
+  opacity: 0.6;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+  position: relative;
+}
+
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  position: relative;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--wa);
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px #25D36640;
+}
+
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px #25D36660; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold-light);
+  font-size: 14px;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.btn-secondary:hover { opacity: 1; }
+
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 3rem;
+  position: relative;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stat {
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--gold);
+  display: block;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--gold-light);
+  opacity: 0.6;
+}
+
+/* ── SECTION BASE ── */
+section { padding: 5rem 1.5rem; }
+
+.container { max-width: 900px; margin: 0 auto; }
+
+.section-tag {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  background: var(--gold-light);
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--brown);
+}
+
+.section-sub {
+  font-size: 1rem;
+  color: var(--brown-light);
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+/* ── PROBLÈME ── */
+.problem { background: var(--white); }
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.problem-card {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--gold);
+}
+
+.problem-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+.problem-title { font-weight: 600; font-size: 15px; margin-bottom: 0.5rem; }
+.problem-text { font-size: 13px; color: var(--brown-light); line-height: 1.5; }
+
+/* ── SOLUTION / FEATURES ── */
+.features { background: var(--cream); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid var(--gold-light);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(200,148,10,0.12);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--gold-light);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 1rem;
+}
+
+.feature-title { font-weight: 600; font-size: 15px; margin-bottom: 0.5rem; }
+.feature-text { font-size: 13px; color: var(--brown-light); line-height: 1.5; }
+
+/* ── TEMOIGNAGES ── */
+.testimonials { background: var(--brown); }
+.testimonials .section-title { color: var(--gold); }
+.testimonials .section-sub { color: var(--gold-light); opacity: 0.7; }
+
+.testi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.testi-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(200,148,10,0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.testi-stars { color: var(--gold); font-size: 14px; margin-bottom: 0.75rem; }
+.testi-text { font-size: 14px; color: var(--gold-light); opacity: 0.8; line-height: 1.6; margin-bottom: 1rem; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 10px; }
+
+.testi-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--gold-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--gold-light);
+  flex-shrink: 0;
+}
+
+.testi-name { font-weight: 600; font-size: 14px; color: var(--gold); }
+.testi-role { font-size: 12px; color: var(--gold-light); opacity: 0.5; }
+
+/* ── TARIFS ── */
+.pricing { background: var(--white); }
+
+.pricing-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.price-card {
+  border: 1px solid var(--gold-light);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.2s;
+  background: var(--cream);
+}
+
+.price-card:hover { transform: translateY(-4px); }
+
+.price-card.featured {
+  border: 2px solid var(--gold);
+  background: var(--brown);
+  color: var(--gold-light);
+}
+
+.price-card.free-card {
+  border: 2px solid var(--green);
+  background: var(--green-light);
+}
+
+.price-badge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+
+.price-badge.gold { background: var(--gold); color: var(--white); }
+.price-badge.green { background: var(--green); color: var(--white); }
+
+.price-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 0.5rem; }
+.price-amount { font-size: 2.2rem; font-weight: 700; color: var(--gold); margin: 0.5rem 0; }
+.price-card.free-card .price-amount { color: var(--green); }
+.price-period { font-size: 12px; opacity: 0.6; margin-bottom: 1.5rem; }
+
+.price-features { text-align: left; margin-bottom: 1.5rem; }
+.price-feature { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0; }
+.price-feature span { color: var(--green); font-size: 15px; }
+.price-card.featured .price-feature { color: var(--gold-light); }
+
+.btn-wa-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: var(--wa);
+  color: white;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.btn-wa-price:hover { opacity: 0.9; }
+
+.btn-wa-free {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: var(--green);
+  color: white;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.btn-wa-free:hover { opacity: 0.9; }
+
+.install-note {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 13px;
+  color: var(--brown-light);
+}
+
+/* ── FAQ ── */
+.faq { background: var(--cream); }
+
+.faq-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+.faq-item {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--gold-light);
+  overflow: hidden;
+}
+
+.faq-q {
+  padding: 1rem 1.25rem;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+.faq-q:hover { background: var(--gold-light); }
+
+.faq-a {
+  padding: 0 1.25rem;
+  font-size: 14px;
+  color: var(--brown-light);
+  line-height: 1.6;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s;
+}
+
+.faq-item.open .faq-a {
+  max-height: 200px;
+  padding: 0 1.25rem 1rem;
+}
+
+.faq-arrow { transition: transform 0.3s; font-size: 12px; }
+.faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+/* ── CTA FINAL ── */
+.cta-final {
+  background: var(--brown);
+  text-align: center;
+  padding: 5rem 1.5rem;
+}
+
+.cta-final h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.cta-final p {
+  color: var(--gold-light);
+  opacity: 0.7;
+  margin-bottom: 2rem;
+  font-size: 15px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #1a0d00;
+  color: var(--gold-light);
+  text-align: center;
+  padding: 2rem 1.5rem;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(61,31,0,0.95);
+  backdrop-filter: blur(10px);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold);
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.nav-cta {
+  background: var(--wa);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero > * { animation: fadeUp 0.8s ease both; }
+.hero-badge { animation-delay: 0.1s; }
+.hero h1 { animation-delay: 0.2s; }
+.hero-sub { animation-delay: 0.3s; }
+.hero-local { animation-delay: 0.4s; }
+.hero-cta { animation-delay: 0.5s; }
+.hero-stats { animation-delay: 0.6s; }
+
+@media (max-width: 600px) {
+  .hero-stats { gap: 1.5rem; }
+  .pricing-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">🌿 GTONTINA</a>
+  <a href="https://wa.me/237697368463?text=Bonjour%20GTONTINA%2C%20je%20veux%20en%20savoir%20plus%20sur%20votre%20application." target="_blank" class="nav-cta">
+    💬 Nous contacter
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding-top: 5rem;">
+  <div class="hero-pattern"></div>
+  <span class="hero-badge">🇨🇲 Fait au Cameroun, pour l'Afrique</span>
+  <h1>La tontine<br><span>enfin digitale</span></h1>
+  <p class="hero-sub">Gérez votre groupe de tontine facilement,<br>en toute transparence, depuis votre téléphone.</p>
+  <p class="hero-local">« Njangui ya digital » — La solidarité modernisée</p>
+  <div class="hero-cta">
+    <a href="https://wa.me/237697368463?text=Bonjour%20GTONTINA%20%F0%9F%8C%BF%0AJe%20souhaite%20d%C3%A9marrer%20mon%20*essai%20gratuit%20d%27une%20rotation*.%0APouvez-vous%20m%27activer%20l%27acc%C3%A8s%20%3F" target="_blank" class="btn-primary">
+      💬 Démarrer gratuitement
+    </a>
+    <a href="#tarifs" class="btn-secondary">Voir les tarifs ↓</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">6</span><span class="stat-label">Types de caisse</span></div>
+    <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Mobile</span></div>
+    <div class="stat"><span class="stat-num">0 FCFA</span><span class="stat-label">Pour démarrer</span></div>
+  </div>
+</section>
+
+<!-- PROBLÈME -->
+<section class="problem">
+  <div class="container">
+    <span class="section-tag">Le problème</span>
+    <h2 class="section-title">La tontine traditionnelle,<br>c'est compliqué à gérer</h2>
+    <p class="section-sub">Chaque mois, les mêmes problèmes reviennent dans votre groupe.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">📒</div>
+        <div class="problem-title">Cahiers perdus</div>
+        <div class="problem-text">Les registres manuscrits se perdent, s'abîment. Impossible de retrouver l'historique d'un membre.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🤝</div>
+        <div class="problem-title">Conflits et oublis</div>
+        <div class="problem-text">Qui a payé ? Qui doit encore ? Les disputes abîment les amitiés et les familles.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📞</div>
+        <div class="problem-title">Rappels manuels</div>
+        <div class="problem-text">Le trésorier passe des heures à appeler chaque membre pour les rappels de cotisation.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🔍</div>
+        <div class="problem-title">Manque de transparence</div>
+        <div class="problem-text">Les membres ne savent pas où en est la caisse. La méfiance s'installe.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="container">
+    <span class="section-tag">La solution</span>
+    <h2 class="section-title">GTONTINA gère tout<br>à votre place</h2>
+    <p class="section-sub">Une application simple, conçue pour les réalités africaines, accessible depuis n'importe quel téléphone.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Tableau de bord en temps réel</div>
+        <div class="feature-text">Solde de la caisse, entrées, sorties — tout est visible par tous les membres autorisés.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-title">Rotation automatique</div>
+        <div class="feature-text">GTONTINA suit les tours et envoie des rappels WhatsApp automatiques avant chaque réunion.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">6 types de caisse</div>
+        <div class="feature-text">Cotisation, tontine rotative, épargne, prêt, caisse joie et caisse malheur — tout est géré.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">100% Mobile</div>
+        <div class="feature-text">Fonctionne sur tout téléphone avec internet. Pas d'installation requise.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📝</div>
+        <div class="feature-title">Rapports de réunion</div>
+        <div class="feature-text">Présences, décisions, points importants — tout est archivé automatiquement.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <div class="feature-title">Messagerie interne</div>
+        <div class="feature-text">Communiquez directement dans l'app avec les membres de votre groupe.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEMOIGNAGES -->
+<section class="testimonials">
+  <div class="container">
+    <span class="section-tag" style="background: rgba(200,148,10,0.2); color: var(--gold);">Ils nous font confiance</span>
+    <h2 class="section-title">Ce que disent nos membres</h2>
+    <p class="section-sub">Des groupes de tontine à Douala, Yaoundé et Bafoussam témoignent.</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">« Depuis GTONTINA, plus de disputes dans notre groupe. Tout le monde voit la caisse en temps réel. C'est la paix ! »</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AM</div>
+          <div>
+            <div class="testi-name">Amina M.</div>
+            <div class="testi-role">Trésorière, Groupe Solidarité — Douala</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">« Les rappels WhatsApp automatiques ont changé notre vie. Avant, j'appelais 15 personnes chaque semaine ! »</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JN</div>
+          <div>
+            <div class="testi-name">Jean-Baptiste N.</div>
+            <div class="testi-role">Président, Tontine Famille — Yaoundé</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">« Simple à utiliser, même ma mère qui n'est pas habituée aux applications a compris en 5 minutes. »</p>
+        <div class="testi-author">
+          <div class="testi-avatar">FK</div>
+          <div>
+            <div class="testi-name">Fatou K.</div>
+            <div class="testi-role">Membre, Groupe Femmes d'Affaires — Bafoussam</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section class="pricing" id="tarifs">
+  <div class="container">
+    <span class="section-tag">Tarifs</span>
+    <h2 class="section-title">Transparent et abordable</h2>
+    <div class="pricing-note">
+      🎁 1 rotation complète offerte — aucune carte requise
+    </div>
+    <div class="pricing-grid">
+
+      <div class="price-card free-card">
+        <span class="price-badge green">Commencez ici</span>
+        <div class="price-name">1 Rotation gratuite</div>
+        <div class="price-amount">0 FCFA</div>
+        <div class="price-period">Toutes fonctionnalités · 7, 14 ou 30 jours</div>
+        <div class="price-features">
+          <div class="price-feature"><span>✓</span> Tableau de bord complet</div>
+          <div class="price-feature"><span>✓</span> 6 types de caisse</div>
+          <div class="price-feature"><span>✓</span> Rappels WhatsApp</div>
+          <div class="price-feature"><span>✓</span> Sans engagement</div>
+        </div>
+        <a href="https://wa.me/237697368463?text=Bonjour%20GTONTINA%20%F0%9F%8C%BF%0AJe%20souhaite%20mon%20*essai%20gratuit%20d%27une%20rotation*.%0ANotre%20groupe%20se%20r%C3%A9unit%20%3A%20(hebdomadairement%20%2F%20deux%20fois%20par%20mois%20%2F%20mensuellement)." target="_blank" class="btn-wa-free">
+          💬 Démarrer gratuitement
+        </a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">3 000</div>
+        <div class="price-period">FCFA / mois · jusqu'à 15 membres</div>
+        <div class="price-features">
+          <div class="price-feature"><span>✓</span> Tableau de bord complet</div>
+          <div class="price-feature"><span>✓</span> 6 types de caisse</div>
+          <div class="price-feature"><span>✓</span> Rappels WhatsApp</div>
+        </div>
+        <a href="https://wa.me/237697368463?text=Bonjour%20GTONTINA%20%F0%9F%8C%BF%0AFormule%20*Starter*%20%E2%80%94%203%20000%20FCFA%2Fmois.%0AInstructions%20de%20paiement%20%3F" target="_blank" class="btn-wa-price">
+          💬 Choisir Starter
+        </a>
+      </div>
+
+      <div class="price-card featured">
+        <span class="price-badge gold">Le plus populaire</span>
+        <div class="price-name" style="color: var(--gold);">Standard</div>
+        <div class="price-amount">6 000</div>
+        <div class="price-period" style="color: var(--gold-light);">FCFA / mois · membres illimités</div>
+        <div class="price-features">
+          <div class="price-feature"><span>✓</span> Tout le Starter inclus</div>
+          <div class="price-feature"><span>✓</span> Membres illimités</div>
+          <div class="price-feature"><span>✓</span> Rapports de réunion</div>
+          <div class="price-feature"><span>✓</span> Messagerie interne</div>
+        </div>
+        <a href="https://wa.me/237697368463?text=Bonjour%20GTONTINA%20%F0%9F%8C%BF%0AFormule%20*Standard*%20%E2%80%94%206%20000%20FCFA%2Fmois.%0AInstructions%20de%20paiement%20%3F" target="_blank" class="btn-wa-price">
+          💬 Choisir Standard
+        </a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-name">Premium</div>
+        <div class="price-amount">12 000</div>
+        <div class="price-period">FCFA / mois · jusqu'à 3 groupes</div>
+        <div class="price-features">
+          <div class="price-feature"><span>✓</span> Tout le Standard inclus</div>
+          <div class="price-feature"><span>✓</span> 3 groupes de tontine</div>
+          <div class="price-feature"><span>✓</span> Support prioritaire</div>
+        </div>
+        <a href="https://wa.me/237697368463?text=Bonjour%20GTONTINA%20%F0%9F%8C%BF%0AFormule%20*Premium*%20%E2%80%94%2012%20000%20FCFA%2Fmois.%0AInstructions%20de%20paiement%20%3F" target="_blank" class="btn-wa-price">
+          💬 Choisir Premium
+        </a>
+      </div>
+
+    </div>
+    <p class="install-note">Frais d'installation unique : 5 000 à 10 000 FCFA · Paiement via MTN MoMo & Orange Money</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <span class="section-tag">Questions fréquentes</span>
+    <h2 class="section-title">Vous avez des questions ?</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Est-ce que GTONTINA gère l'argent directement ? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Non. GTONTINA est un outil de gestion et de traçabilité. L'argent reste entre les membres du groupe, géré via MTN MoMo ou Orange Money directement entre vous.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Faut-il installer une application ? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Non, GTONTINA fonctionne directement dans votre navigateur web (Chrome, Firefox). Pas de téléchargement nécessaire. Accessible depuis n'importe quel téléphone avec internet.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Comment fonctionne l'essai gratuit ? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Vous bénéficiez d'une rotation complète gratuite — 7 jours si votre groupe se réunit chaque semaine, 14 jours si bi-mensuel, 30 jours si mensuel. Aucune carte bancaire requise.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Combien de membres peut-on avoir ? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Le plan Starter accepte jusqu'à 15 membres. Le plan Standard est illimité. Le plan Premium permet de gérer jusqu'à 3 groupes de tontine distincts.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Comment contacter le support ? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a">Directement sur WhatsApp au +237 697 368 463 ou par email à guerinfap@gmail.com. Réponse garantie dans la journée.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="container">
+    <h2>Prêt à moderniser<br>votre tontine ?</h2>
+    <p>Rejoignez des groupes qui font confiance à GTONTINA.<br>Démarrez votre première rotation gratuitement.</p>
+    <a href="https://wa.me/237697368463?text=Bonjour%20GTONTINA%20%F0%9F%8C%BF%0AJe%20souhaite%20d%C3%A9marrer%20mon%20*essai%20gratuit%20d%27une%20rotation*.%0APouvez-vous%20m%27activer%20l%27acc%C3%A8s%20%3F" target="_blank" class="btn-primary" style="margin: 0 auto; width: fit-content;">
+      💬 Démarrer gratuitement sur WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>🌿 GTONTINA — La tontine digitale du Cameroun</p>
+  <p style="margin-top: 8px;">+237 697 368 463 · guerinfap@gmail.com</p>
+  <p style="margin-top: 8px; font-size: 11px;">© 2026 GTONTINA · Douala, Cameroun</p>
+</footer>
+
+<script>
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+</script>
+
+</body>
+</html>
