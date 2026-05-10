@@ -4,10 +4,6 @@ const WHATSAPP_NUMBER = "237697368463";
 const encode = (t) => encodeURIComponent(t);
 const waLink = (msg) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encode(msg)}`;
 
-const CINETPAY_API_KEY = import.meta.env.VITE_CINETPAY_API_KEY;
-const CINETPAY_SITE_ID = import.meta.env.VITE_CINETPAY_SITE_ID;
-const CINETPAY_BASE_URL = import.meta.env.VITE_CINETPAY_BASE_URL;
-
 const essaiMsg = "Bonjour GTONTINA 🌿\nJe souhaite démarrer mon *essai gratuit d'une rotation*.\nNotre groupe se réunit : (hebdomadairement / deux fois par mois / mensuellement).\nPouvez-vous m'activer l'accès ?";
 
 const plans = [
@@ -16,39 +12,22 @@ const plans = [
   { id: "premium", name: "Premium", members: "Jusqu'à 3 groupes", amount: 12000, amountDisplay: "12 000", features: ["Tout le Standard inclus", "3 groupes de tontine", "Support prioritaire"], msg: "Bonjour GTONTINA 🌿\nFormule *Premium* — 12 000 FCFA/mois.\nInstructions de paiement ?" },
 ];
 
-const generateTransactionId = () => "GTONTINA-" + Date.now() + "-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-
 async function initierPaiement(plan, client, setStatus) {
   setStatus({ loading: true, error: null, success: false });
 
-  const payload = {
-    apikey: CINETPAY_API_KEY,
-    site_id: CINETPAY_SITE_ID,
-    transaction_id: generateTransactionId(),
-    amount: plan.amount,
-    currency: "XAF",
-    description: `Abonnement GTONTINA ${plan.name}`,
-    notify_url: "https://tontina-app.vercel.app/api/cinetpay-notify",
-    return_url: "https://tontina-app.vercel.app/?payment=success",
-    channels: "MOBILE_MONEY",
-    lang: "fr",
-    customer_name: client.nom,
-    customer_surname: client.nom,
-    customer_email: client.email || "client@gtontina.com",
-    customer_phone_number: client.telephone,
-    customer_address: "Cameroun",
-    customer_city: "Douala",
-    customer_country: "CM",
-    customer_state: "CM",
-    customer_zip_code: "00237",
-  };
-
   try {
-    const res = await fetch(`${CINETPAY_BASE_URL}/payment`, {
+    const res = await fetch("/api/cinetpay", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        plan_name: plan.name,
+        amount: plan.amount,
+        customer_name: client.nom,
+        customer_phone: client.telephone,
+        customer_email: client.email,
+      }),
     });
+
     const data = await res.json();
 
     if (data.code === "201" && data.data?.payment_url) {
@@ -176,3 +155,31 @@ export default function PaiementPage() {
           </div>
         </div>
         {["Tableau de bord complet", "6 types de caisse", "Rotation + rappels WhatsApp", "Rapports & messagerie"].map(f => (
+          <div key={f} style={{ fontSize: 13, color: "#555", padding: "2px 0" }}>✓ {f}</div>
+        ))}
+        <a href={waLink(essaiMsg)} target="_blank" rel="noreferrer"
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 12, padding: 10, background: "#dcfce7", color: "#166534", border: "1px solid #16a34a", borderRadius: 8, fontSize: 14, fontWeight: 600, textDecoration: "none" }}>
+          💬 Démarrer ma rotation gratuite
+        </a>
+        <div style={{ fontSize: 12, color: "#888", textAlign: "center", marginTop: 6 }}>Aucun paiement requis · Sans engagement</div>
+      </div>
+
+      <hr style={{ margin: "1.25rem 0", border: "none", borderTop: "1px solid #e5e5e5" }} />
+      <div style={{ fontSize: 11, color: "#888", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Choisissez votre formule</div>
+
+      {plans.map(plan => <PlanCard key={plan.id} plan={plan} />)}
+
+      <div style={{ background: "#f5f5f5", borderRadius: 8, padding: "0.75rem 1rem", fontSize: 12, color: "#555" }}>
+        <strong>Frais d'installation unique :</strong> 5 000 à 10 000 FCFA · Paiement via <strong>MTN MoMo</strong> et <strong>Orange Money</strong>.
+      </div>
+
+      <hr style={{ margin: "1.25rem 0", border: "none", borderTop: "1px solid #e5e5e5" }} />
+      <div style={{ display: "flex", gap: 8 }}>
+        <a href={waLink("Bonjour GTONTINA, j'ai une question.")} target="_blank" rel="noreferrer"
+          style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: 9, border: "1px solid #e5e5e5", borderRadius: 8, fontSize: 13, color: "#555", textDecoration: "none" }}>💬 Question</a>
+        <a href="mailto:guerinfap@gmail.com"
+          style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: 9, border: "1px solid #e5e5e5", borderRadius: 8, fontSize: 13, color: "#555", textDecoration: "none" }}>✉️ Email</a>
+      </div>
+    </div>
+  );
+}
