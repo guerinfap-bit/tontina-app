@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     amount: amount,
     currency: "XAF",
     description: `Abonnement GTONTINA ${plan_name}`,
-    notify_url: "https://tontina-app.vercel.app/api/cinetpay-notify",
+    notify_url: "https://hook.eu1.make.com/jziu2x14nmuykhpvakq69yukf7bm",
     return_url: "https://tontina-app.vercel.app/?payment=success",
     channels: "MOBILE_MONEY",
     lang: "fr",
