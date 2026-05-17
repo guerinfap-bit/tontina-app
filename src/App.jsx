@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PaiementPage from "./PaiementPage";
-
+import DashboardRevenuPage from "./DashboardRevenuPage";
+import ProfilTontinePage from "./ProfilTontinePage";
 const BRAND = {
   name: "GTONTINA",
   slogan: "La tontine digitale du Cameroun",
@@ -184,6 +185,8 @@ export default function App() {
     { key: "reunions", label: "Réunions", icon: "◫" },
     { key: "messages", label: "Messages", icon: "◻" },
     { key: "paiement", label: "Paiement", icon: "💳" },
+    { key: "revenus", label: "Revenus", icon: "📊" },
+{ key: "profil", label: "Ma Tontine", icon: "👤" },
   ];
 
   const changeTab = (key) => { setTab(key); setMobileMenuOpen(false); };
@@ -249,6 +252,8 @@ export default function App() {
         <main style={{ flex: 1, padding: isMobile ? "1rem" : "1.5rem", overflowY: "auto", minWidth: 0 }}>
 
           {tab === "paiement" && <PaiementPage />}
+          {tab === "revenus" && <DashboardRevenuPage />}
+{tab === "profil" && <ProfilTontinePage />}
           {/* DASHBOARD */}
           {tab === "dashboard" && (
             <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
